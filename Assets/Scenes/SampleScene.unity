@@ -687,7 +687,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 116
   m_CollisionDetection: 0
 --- !u!114 &1841959355
 MonoBehaviour:
@@ -701,6 +701,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dddfe05f63067a6409a58924c3efec6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Water_List: []
+  Water: {fileID: 2118315031670294546, guid: eb5751f87168c4d4b8aef6229f4881f3, type: 3}
+  water_max: 0
   speed: 3
 --- !u!1 &1874294788
 GameObject:
