@@ -5,11 +5,14 @@ using UnityEngine;
 public class Player_S : MonoBehaviour
 {
     private Vector3 move_Vec;
+    private int bullet_count;
     public List<GameObject> Water_List = new List<GameObject>();
 
     // 물풍선 배열을 만드는데, 크기는 일단 water_length만큼 고정으로 만들긴 해야하고, 
 
     public GameObject Water;
+    public GameObject Bullet;
+
     public int water_max;
     public float speed;
 
@@ -76,6 +79,29 @@ public class Player_S : MonoBehaviour
         {
             water_max++;
         }
+        else if (Input.GetKeyDown("4")) //총 발사해서 물풍선 터뜨리기
+        {
+            bullet_count += 3; //불렛 카운트는 아이템을 먹었을 때로 이동하기, 먹은 상태에서 4번을 눌렀을 때 총이 나와야하니까, Input.GetKeyDown(4) && bullet_count >0 조건 변경
+            this.gameObject.transform.GetChild(1).gameObject.SetActive(true);
+
+        }
+
+
+        if (this.gameObject.transform.GetChild(1).gameObject.activeSelf == true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Transform Gun_pos = this.gameObject.transform.GetChild(1).gameObject.transform;
+                Rigidbody bullet_rigid = Instantiate(Bullet, new Vector3(Gun_pos.position.x, Gun_pos.position.y, Gun_pos.position.z), Quaternion.identity).GetComponent<Rigidbody>();
+                bullet_rigid.velocity = transform.forward * 5;
+                bullet_count--;
+                if (bullet_count <= 0)
+                {
+                    this.gameObject.transform.GetChild(1).gameObject.SetActive(false);
+                }
+            }
+        }
+
     }
 
     void Water_push(GameObject Water)
