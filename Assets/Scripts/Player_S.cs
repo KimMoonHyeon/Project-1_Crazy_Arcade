@@ -10,11 +10,13 @@ public class Player_S : MonoBehaviour
     // 물풍선 배열을 만드는데, 크기는 일단 water_length만큼 고정으로 만들긴 해야하고, 
 
     public GameObject Water;
-
     public int water_max;
     public float speed;
 
     Rigidbody rigid;
+
+
+
 
     void Start()
     {
@@ -25,11 +27,13 @@ public class Player_S : MonoBehaviour
     void Update()
     {
         Plyaer_Move();
-        Plyaer_Skiil(); 
+        Plyaer_Skiil();
     }
 
     void Plyaer_Move()
     {
+        rigid.velocity = Vector3.zero; //Water와 충돌시 밀림 방지, 가속도 = 0;
+
         float m_x = Input.GetAxisRaw("Horizontal");
         float m_z = Input.GetAxisRaw("Vertical");
 
@@ -74,17 +78,30 @@ public class Player_S : MonoBehaviour
         }
     }
 
+    void Water_push(GameObject Water)
+    {
+        Water.transform.position -= new Vector3(-1, 0, 0);
+    }
+
     private void OnTriggerExit(Collider other)
     {
         other.isTrigger = false;
     }
-    OnCollision();
-    
+    private void OnCollisionEnter(Collision collision)
+    {   //if를 넣어 밀기 아이템을 먹었을 때만 해당 if를 true로 만들어 밀기 가능하도록 만들기
+        if(collision.gameObject.tag == "Water")
+        {
+            Rigidbody water_rigid = collision.gameObject.GetComponent<Rigidbody>();
+            water_rigid.velocity = move_Vec * 25;
+            //그러니까 워터끼리의 충돌을 없애면 되오나, 통과는 되지 않게 하기.
+        }
+    }
+
 
     //코루틴 함수
     IEnumerator Water_Boom()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(10f);
         Destroy(Water_List[0]);
         Water_List.RemoveAt(0);
     }
