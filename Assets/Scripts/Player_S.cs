@@ -6,16 +6,14 @@ public class Player_S : MonoBehaviour
 {
     private Vector3 move_Vec;
     private int bullet_count;
-    public List<GameObject> Water_List = new List<GameObject>();
-    public List<GameObject> Water_Particle_List = new List<GameObject>();
+    public List<GameObject> Water_Empty_List = new List<GameObject>();
     // 물풍선 배열을 만드는데, 크기는 일단 water_length만큼 고정으로 만들긴 해야하고, 
 
-    public GameObject Water;
-    public GameObject Water_Particle;
+    public GameObject Water_Empty;
     public GameObject Bullet;
-    public GameObject empty_obj;
 
     public int water_max;
+    public int water_name;
     public float speed;
 
     Rigidbody rigid;
@@ -24,6 +22,7 @@ public class Player_S : MonoBehaviour
 
     void Start()
     {
+        water_name = 0;
         water_boom_size = 0;
         water_max = 3;
         rigid = GetComponent<Rigidbody>();
@@ -54,19 +53,28 @@ public class Player_S : MonoBehaviour
 
     void Plyaer_Skiil()
     {
-        GameObject new_Water;
+        
        
         //space -> 물풍선 생성
         if (Input.GetKeyDown(KeyCode.Space))
         {
             //Debug.Log(Water_List.Count);
-            if (Water_List.Count < water_max)
+            if (Water_Empty_List.Count < water_max)
             {
                 // 1,2,3
-                new_Water = Instantiate(Water, new Vector3(transform.position.x, 0.3f, transform.position.z), Quaternion.identity);
-                Water_List.Add(new_Water);
-                new_Water.gameObject.GetComponent<Collider>().isTrigger = true;
+                water_name++;
+                GameObject new_Water_Empty = Instantiate(Water_Empty, new Vector3(transform.position.x, 0.3f, transform.position.z), Quaternion.identity);
 
+                //Instantiate(new_Water_Empty.transform.GetChild(0).gameObject, new Vector3(transform.position.x, 0.3f, transform.position.z), Quaternion.identity);
+                new_Water_Empty.name = water_name.ToString();
+
+                //GameObject new_Water_Particle = Instantiate(new_Water_Empty.transform.GetChild(1).gameObject, new Vector3(new_Water_Empty.transform.GetChild(0).gameObject.transform.position.x, new_Water_Empty.transform.GetChild(0).gameObject.transform.position.y, new_Water_Empty.transform.GetChild(0).gameObject.transform.position.z), Quaternion.identity);
+                new_Water_Empty.transform.GetChild(1).gameObject.transform.GetChild(0).localScale = new Vector3(1.2f + water_boom_size, 0.3f, 0.3f);
+                new_Water_Empty.transform.GetChild(1).gameObject.transform.GetChild(1).localScale = new Vector3(0.3f, 0.3f, 1.2f + water_boom_size);
+                new_Water_Empty.transform.GetChild(1).gameObject.SetActive(false);
+
+
+                Water_Empty_List.Add(new_Water_Empty);
                 StartCoroutine("Water_Boom");
                 //터질 때, 3d 큐브로 한 번 재현해보기 Trigger 이용해서 충돌판정
             }
@@ -100,8 +108,11 @@ public class Player_S : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 Transform Gun_pos = this.gameObject.transform.GetChild(1).gameObject.transform;
-                Rigidbody bullet_rigid = Instantiate(Bullet, new Vector3(Gun_pos.position.x, Gun_pos.position.y, Gun_pos.position.z), Quaternion.identity).GetComponent<Rigidbody>();
+                GameObject new_Bullet = Instantiate(Bullet, new Vector3(Gun_pos.position.x, Gun_pos.position.y, Gun_pos.position.z), Quaternion.identity);
+                //new_Bullet.GetComponent<Collider>().isTrigger = true;
+                Rigidbody bullet_rigid = new_Bullet.GetComponent<Rigidbody>();
                 bullet_rigid.velocity = transform.forward * 5;
+               
                 bullet_count--;
                 if (bullet_count <= 0)
                 {
@@ -112,18 +123,18 @@ public class Player_S : MonoBehaviour
 
     }
 
-    void Water_push(GameObject Water)
-    {
-        Water.transform.position -= new Vector3(-1, 0, 0);
-    }
-
     private void OnTriggerExit(Collider other)
     {
-        other.isTrigger = false;
+        if(other.gameObject.tag != "Bullet")
+        {
+            other.isTrigger = false;
+        }
+        
     }
+
     private void OnCollisionEnter(Collision collision)
     {   //if를 넣어 밀기 아이템을 먹었을 때만 해당 if를 true로 만들어 밀기 가능하도록 만들기
-        if(collision.gameObject.tag == "Water")
+        if (collision.gameObject.tag == "Water")
         {
             Rigidbody water_rigid = collision.gameObject.GetComponent<Rigidbody>();
             water_rigid.velocity = move_Vec * 25;
@@ -131,28 +142,20 @@ public class Player_S : MonoBehaviour
         }
     }
 
-
     //코루틴 함수
     IEnumerator Water_Boom()
     {
-        yield return new WaitForSeconds(2f);
-        Transform Water_List_pos = Water_List[0].transform;
-        GameObject new_Water_Particle = Instantiate(Water_Particle, new Vector3(Water_List_pos.position.x, Water_List_pos.position.y, Water_List_pos.position.z), Quaternion.identity);
-        new_Water_Particle.transform.GetChild(0).localScale = new Vector3(1.2f + water_boom_size, 0.3f, 0.3f);
-        new_Water_Particle.transform.GetChild(1).localScale = new Vector3(0.3f, 0.3f, 1.2f + water_boom_size);
-        new_Water_Particle.name = Water_List.Count.ToString();
-        Water_Particle_List.Add(new_Water_Particle);
-        Debug.Log(Water_Particle_List.Count);
-        Destroy(Water_List[0]);
-        Water_List.RemoveAt(0);
+        yield return new WaitForSeconds(30f);
 
+        Water_Empty_List[0].transform.GetChild(0).gameObject.SetActive(false);
+        Water_Empty_List[0].transform.GetChild(1).gameObject.SetActive(true);
         StartCoroutine("Water_Particle_Boom");
     }
 
     IEnumerator Water_Particle_Boom()
     {
-        yield return new WaitForSeconds(10f);
-        Destroy(Water_Particle_List[0]);
-        Water_Particle_List.RemoveAt(0);
+        yield return new WaitForSeconds(0.3f);
+        Destroy(Water_Empty_List[0]);
+        Water_Empty_List.RemoveAt(0);
     }
 }

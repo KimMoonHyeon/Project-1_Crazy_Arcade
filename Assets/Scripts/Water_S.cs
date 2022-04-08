@@ -17,10 +17,10 @@ public class Water_S : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+ 
         if(collision.gameObject.tag =="Water" || collision.gameObject.tag == "Wall")
         {
             water_rigid.isKinematic = true;
-            Debug.Log(collision.gameObject.name);
         }
     }
 

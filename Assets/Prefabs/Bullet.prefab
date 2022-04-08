@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2118315031670294546
+--- !u!1 &1471732244137398284
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,48 +8,48 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8312881794977547672}
-  - component: {fileID: 4757552033475325076}
-  - component: {fileID: 3652457541621350147}
-  - component: {fileID: 2791802015927631403}
-  - component: {fileID: 3457762194345813808}
-  - component: {fileID: 7392544115783485476}
-  m_Layer: 4
-  m_Name: Water
-  m_TagString: Water
+  - component: {fileID: 4819163963960744470}
+  - component: {fileID: 7712075919406935404}
+  - component: {fileID: 8310144050390205802}
+  - component: {fileID: 5075465985493076864}
+  - component: {fileID: 141486525419681009}
+  - component: {fileID: -98067804492099746}
+  m_Layer: 0
+  m_Name: Bullet
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8312881794977547672
+--- !u!4 &4819163963960744470
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2118315031670294546}
+  m_GameObject: {fileID: 1471732244137398284}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.3, z: 0}
-  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_LocalPosition: {x: 0.5700445, y: 1.522673, z: 0.9112641}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &4757552033475325076
+--- !u!33 &7712075919406935404
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2118315031670294546}
+  m_GameObject: {fileID: 1471732244137398284}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &3652457541621350147
+--- !u!23 &8310144050390205802
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2118315031670294546}
+  m_GameObject: {fileID: 1471732244137398284}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ae2aff78533081c45b2e3f942b83a541, type: 2}
+  - {fileID: 2100000, guid: abfe1c7f2113cbd45b884256b4ae3e18, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -84,26 +84,26 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &2791802015927631403
+--- !u!135 &5075465985493076864
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2118315031670294546}
+  m_GameObject: {fileID: 1471732244137398284}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &3457762194345813808
+--- !u!54 &141486525419681009
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2118315031670294546}
+  m_GameObject: {fileID: 1471732244137398284}
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
@@ -113,15 +113,15 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
---- !u!114 &7392544115783485476
+--- !u!114 &-98067804492099746
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2118315031670294546}
+  m_GameObject: {fileID: 1471732244137398284}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a25783629d0e3243be5d74732b36983, type: 3}
+  m_Script: {fileID: 11500000, guid: 776285ea8a72d43438133341dcfe8522, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
