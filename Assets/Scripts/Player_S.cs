@@ -7,22 +7,24 @@ public class Player_S : MonoBehaviour
     private Vector3 move_Vec;
     private int bullet_count;
     public List<GameObject> Water_List = new List<GameObject>();
-
+    public List<GameObject> Water_Particle_List = new List<GameObject>();
     // 물풍선 배열을 만드는데, 크기는 일단 water_length만큼 고정으로 만들긴 해야하고, 
 
     public GameObject Water;
+    public GameObject Water_Particle;
     public GameObject Bullet;
+    public GameObject empty_obj;
 
     public int water_max;
     public float speed;
 
     Rigidbody rigid;
 
-
-
+    private float water_boom_size;
 
     void Start()
     {
+        water_boom_size = 0;
         water_max = 3;
         rigid = GetComponent<Rigidbody>();
     }
@@ -52,6 +54,8 @@ public class Player_S : MonoBehaviour
 
     void Plyaer_Skiil()
     {
+        GameObject new_Water;
+       
         //space -> 물풍선 생성
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -59,9 +63,10 @@ public class Player_S : MonoBehaviour
             if (Water_List.Count < water_max)
             {
                 // 1,2,3
-                GameObject new_Water = Instantiate(Water, new Vector3(transform.position.x, 0.3f, transform.position.z), Quaternion.identity);
+                new_Water = Instantiate(Water, new Vector3(transform.position.x, 0.3f, transform.position.z), Quaternion.identity);
                 Water_List.Add(new_Water);
                 new_Water.gameObject.GetComponent<Collider>().isTrigger = true;
+
                 StartCoroutine("Water_Boom");
                 //터질 때, 3d 큐브로 한 번 재현해보기 Trigger 이용해서 충돌판정
             }
@@ -85,7 +90,10 @@ public class Player_S : MonoBehaviour
             this.gameObject.transform.GetChild(1).gameObject.SetActive(true);
 
         }
-
+        else if (Input.GetKeyDown("5")) //물풍선 길이 늘리기, 늘리기는 되오나, 해당 물풍선을 설치하고 아이템을 먹으면,아이템 먹기 전 길이까지 같이 커지는 버그
+        {
+            water_boom_size += 0.6f;
+        }
 
         if (this.gameObject.transform.GetChild(1).gameObject.activeSelf == true)
         {
@@ -127,8 +135,24 @@ public class Player_S : MonoBehaviour
     //코루틴 함수
     IEnumerator Water_Boom()
     {
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(2f);
+        Transform Water_List_pos = Water_List[0].transform;
+        GameObject new_Water_Particle = Instantiate(Water_Particle, new Vector3(Water_List_pos.position.x, Water_List_pos.position.y, Water_List_pos.position.z), Quaternion.identity);
+        new_Water_Particle.transform.GetChild(0).localScale = new Vector3(1.2f + water_boom_size, 0.3f, 0.3f);
+        new_Water_Particle.transform.GetChild(1).localScale = new Vector3(0.3f, 0.3f, 1.2f + water_boom_size);
+        new_Water_Particle.name = Water_List.Count.ToString();
+        Water_Particle_List.Add(new_Water_Particle);
+        Debug.Log(Water_Particle_List.Count);
         Destroy(Water_List[0]);
         Water_List.RemoveAt(0);
+
+        StartCoroutine("Water_Particle_Boom");
+    }
+
+    IEnumerator Water_Particle_Boom()
+    {
+        yield return new WaitForSeconds(10f);
+        Destroy(Water_Particle_List[0]);
+        Water_Particle_List.RemoveAt(0);
     }
 }

@@ -5,7 +5,6 @@ using UnityEngine;
 public class Water_S : MonoBehaviour
 {
     Rigidbody water_rigid;
-    public GameObject Water_obj;
     void Start()
     {
         water_rigid = GetComponent<Rigidbody>();
@@ -18,7 +17,7 @@ public class Water_S : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag =="Water")
+        if(collision.gameObject.tag =="Water" || collision.gameObject.tag == "Wall")
         {
             water_rigid.isKinematic = true;
             Debug.Log(collision.gameObject.name);
