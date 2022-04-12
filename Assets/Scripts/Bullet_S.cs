@@ -45,7 +45,7 @@ public class Bullet_S : MonoBehaviour
     }
     IEnumerator Bullet_Water_Particle_Boom(int i)
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.2f);
         Destroy(Player.Water_Empty_List[i]);
         Destroy(this.gameObject);
 

@@ -5,25 +5,25 @@ using UnityEngine;
 public class Player_S : MonoBehaviour
 {
     private Vector3 move_Vec;
-    private int bullet_count;
-    public List<GameObject> Water_Empty_List = new List<GameObject>();
+    private int water_name;
 
+    private int bullet_count; //총알 장전 스킬
+    private int water_max; //물풍선 개수 늘리기 스킬
+    private int barrier_time;
+    private float speed; // 스피드업 스킬
+    private float water_boom_size; //물풍선 길이 증가 스킬
+
+
+    public List<GameObject> Water_Empty_List = new List<GameObject>();
     public GameObject Water_Empty;
     public GameObject Bullet;
 
-    public int water_max;
-    public int water_name;
-    public float speed;
-
     Rigidbody rigid;
-
-    public int water_up;
-
-    private float water_boom_size;
 
     void Start()
     {
-        water_up = 0;
+        speed = 5;
+        barrier_time = 0;
         water_name = 0;
         water_boom_size = 0;
         water_max = 3;
@@ -42,7 +42,7 @@ public class Player_S : MonoBehaviour
 
         float m_x = Input.GetAxisRaw("Horizontal");
         float m_z = Input.GetAxisRaw("Vertical");
-
+        
         move_Vec = new Vector3(m_x, 0, m_z);
         //plyaer 이동
         this.transform.position += move_Vec.normalized * speed * Time.deltaTime;
@@ -98,7 +98,14 @@ public class Player_S : MonoBehaviour
         {
             water_boom_size += 0.6f;
         }
-
+        else if (Input.GetKeyDown("6"))
+        {
+            barrier_time += 3;
+            if (this.transform.GetChild(2).gameObject.activeSelf == false)
+            {
+                StartCoroutine("Barrier_TIme");
+            }
+}
         if (this.gameObject.transform.GetChild(1).gameObject.activeSelf == true)
         {
             if (Input.GetMouseButtonDown(0))
@@ -127,6 +134,14 @@ public class Player_S : MonoBehaviour
         }
         
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Water_Particle" && barrier_time ==0)
+        {
+            Debug.Log("으악!");
+
+        }
+    }
 
     private void OnCollisionEnter(Collision collision)
     {   //if를 넣어 밀기 아이템을 먹었을 때만 해당 if를 true로 만들어 밀기 가능하도록 만들기
@@ -147,7 +162,6 @@ public class Player_S : MonoBehaviour
         {
             Water_Empty_List[a].transform.GetChild(0).gameObject.SetActive(false);
             Water_Empty_List[a].transform.GetChild(1).gameObject.SetActive(true);
-            water_up++;
             StartCoroutine("Water_Particle_Boom", a);
         }
 
@@ -156,7 +170,7 @@ public class Player_S : MonoBehaviour
     IEnumerator Water_Particle_Boom(int a)
     {
         
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         if (GameObject.Find(a.ToString()) == true)
         {
             Destroy(Water_Empty_List[a]);
@@ -167,7 +181,7 @@ public class Player_S : MonoBehaviour
     IEnumerator Non_Attack(string a)
     {
         int b = int.Parse(a);
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(2f);
         if (GameObject.Find(a) == true)
         {
             StartCoroutine("Water_Boom", b);
@@ -175,6 +189,21 @@ public class Player_S : MonoBehaviour
 
     }
 
-   
+    IEnumerator Barrier_TIme() //중복해서 실행할 수 있게 만들어야함, 
+    {
+        this.gameObject.transform.GetChild(2).gameObject.SetActive(true);
+        while (barrier_time > 0)
+        {
+            Debug.Log("방어막 사용시간:" + barrier_time);
+            yield return new WaitForSeconds(1f);
+            barrier_time--;
+        }
+        if (barrier_time <= 0)
+        {
+            this.gameObject.transform.GetChild(2).gameObject.SetActive(false);
+        }
+    }
+
+
 
 }

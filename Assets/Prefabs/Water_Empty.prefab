@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 1612316967926866946}
   m_Layer: 0
   m_Name: Water_Particle_1
-  m_TagString: Untagged
+  m_TagString: Water_Particle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -187,11 +187,11 @@ GameObject:
   - component: {fileID: 6484017182329550555}
   m_Layer: 0
   m_Name: Water_Particle
-  m_TagString: Untagged
+  m_TagString: Water_Particle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6484017182329550555
 Transform:
   m_ObjectHideFlags: 0
@@ -222,7 +222,7 @@ GameObject:
   - component: {fileID: 578276108475575084}
   m_Layer: 0
   m_Name: Water_Particle_2
-  m_TagString: Untagged
+  m_TagString: Water_Particle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
