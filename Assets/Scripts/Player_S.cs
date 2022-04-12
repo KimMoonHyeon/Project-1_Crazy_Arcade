@@ -7,7 +7,6 @@ public class Player_S : MonoBehaviour
     private Vector3 move_Vec;
     private int bullet_count;
     public List<GameObject> Water_Empty_List = new List<GameObject>();
-    // 물풍선 배열을 만드는데, 크기는 일단 water_length만큼 고정으로 만들긴 해야하고, 
 
     public GameObject Water_Empty;
     public GameObject Bullet;
@@ -18,10 +17,13 @@ public class Player_S : MonoBehaviour
 
     Rigidbody rigid;
 
+    public int water_up;
+
     private float water_boom_size;
 
     void Start()
     {
+        water_up = 0;
         water_name = 0;
         water_boom_size = 0;
         water_max = 3;
@@ -58,26 +60,20 @@ public class Player_S : MonoBehaviour
         //space -> 물풍선 생성
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            //Debug.Log(Water_List.Count);
-            if (Water_Empty_List.Count < water_max)
-            {
-                // 1,2,3
-                water_name++;
-                GameObject new_Water_Empty = Instantiate(Water_Empty, new Vector3(transform.position.x, 0.3f, transform.position.z), Quaternion.identity);
+            
+            GameObject new_Water_Empty = Instantiate(Water_Empty, new Vector3(transform.position.x, 0.3f, transform.position.z), Quaternion.identity);
 
-                //Instantiate(new_Water_Empty.transform.GetChild(0).gameObject, new Vector3(transform.position.x, 0.3f, transform.position.z), Quaternion.identity);
-                new_Water_Empty.name = water_name.ToString();
-
-                //GameObject new_Water_Particle = Instantiate(new_Water_Empty.transform.GetChild(1).gameObject, new Vector3(new_Water_Empty.transform.GetChild(0).gameObject.transform.position.x, new_Water_Empty.transform.GetChild(0).gameObject.transform.position.y, new_Water_Empty.transform.GetChild(0).gameObject.transform.position.z), Quaternion.identity);
-                new_Water_Empty.transform.GetChild(1).gameObject.transform.GetChild(0).localScale = new Vector3(1.2f + water_boom_size, 0.3f, 0.3f);
-                new_Water_Empty.transform.GetChild(1).gameObject.transform.GetChild(1).localScale = new Vector3(0.3f, 0.3f, 1.2f + water_boom_size);
-                new_Water_Empty.transform.GetChild(1).gameObject.SetActive(false);
+            new_Water_Empty.name = water_name.ToString();
+               
+            new_Water_Empty.transform.GetChild(1).gameObject.transform.GetChild(0).localScale = new Vector3(1.2f + water_boom_size, 0.3f, 0.3f);
+            new_Water_Empty.transform.GetChild(1).gameObject.transform.GetChild(1).localScale = new Vector3(0.3f, 0.3f, 1.2f + water_boom_size);
+            new_Water_Empty.transform.GetChild(1).gameObject.SetActive(false);
 
 
-                Water_Empty_List.Add(new_Water_Empty);
-                StartCoroutine("Water_Boom");
-                //터질 때, 3d 큐브로 한 번 재현해보기 Trigger 이용해서 충돌판정
-            }
+            Water_Empty_List.Add(new_Water_Empty);
+            StartCoroutine("Non_Attack", new_Water_Empty.name);
+            water_name++;
+            
             
         }
         else if (Input.GetKeyDown("1")) //스피드 증가
@@ -109,7 +105,7 @@ public class Player_S : MonoBehaviour
             {
                 Transform Gun_pos = this.gameObject.transform.GetChild(1).gameObject.transform;
                 GameObject new_Bullet = Instantiate(Bullet, new Vector3(Gun_pos.position.x, Gun_pos.position.y, Gun_pos.position.z), Quaternion.identity);
-                //new_Bullet.GetComponent<Collider>().isTrigger = true;
+          
                 Rigidbody bullet_rigid = new_Bullet.GetComponent<Rigidbody>();
                 bullet_rigid.velocity = transform.forward * 5;
                
@@ -143,19 +139,42 @@ public class Player_S : MonoBehaviour
     }
 
     //코루틴 함수
-    IEnumerator Water_Boom()
+    IEnumerator Water_Boom(int a)
     {
-        yield return new WaitForSeconds(30f);
+        Debug.Log("Water_Boom_1");
+        yield return null;
+        if (GameObject.Find(a.ToString()) == true)
+        {
+            Water_Empty_List[a].transform.GetChild(0).gameObject.SetActive(false);
+            Water_Empty_List[a].transform.GetChild(1).gameObject.SetActive(true);
+            water_up++;
+            StartCoroutine("Water_Particle_Boom", a);
+        }
 
-        Water_Empty_List[0].transform.GetChild(0).gameObject.SetActive(false);
-        Water_Empty_List[0].transform.GetChild(1).gameObject.SetActive(true);
-        StartCoroutine("Water_Particle_Boom");
     }
 
-    IEnumerator Water_Particle_Boom()
+    IEnumerator Water_Particle_Boom(int a)
     {
-        yield return new WaitForSeconds(0.3f);
-        Destroy(Water_Empty_List[0]);
-        Water_Empty_List.RemoveAt(0);
+        
+        yield return new WaitForSeconds(0.5f);
+        if (GameObject.Find(a.ToString()) == true)
+        {
+            Destroy(Water_Empty_List[a]);
+        }
+        
     }
+
+    IEnumerator Non_Attack(string a)
+    {
+        int b = int.Parse(a);
+        yield return new WaitForSeconds(4f);
+        if (GameObject.Find(a) == true)
+        {
+            StartCoroutine("Water_Boom", b);
+        }
+
+    }
+
+   
+
 }
