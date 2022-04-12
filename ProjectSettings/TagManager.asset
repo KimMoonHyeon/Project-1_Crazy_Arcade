@@ -9,6 +9,8 @@ TagManager:
   - Gun
   - Wall
   - Bullet
+  - Water_Particle
+  - Obstacle
   layers:
   - Default
   - TransparentFX
