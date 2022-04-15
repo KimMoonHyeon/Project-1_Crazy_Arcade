@@ -156,7 +156,7 @@ public class Player_S : MonoBehaviour
     //코루틴 함수
     IEnumerator Water_Boom(int a)
     {
-        Debug.Log("Water_Boom_1");
+       
         yield return null;
         if (GameObject.Find(a.ToString()) == true)
         {
@@ -194,7 +194,7 @@ public class Player_S : MonoBehaviour
         this.gameObject.transform.GetChild(2).gameObject.SetActive(true);
         while (barrier_time > 0)
         {
-            Debug.Log("방어막 사용시간:" + barrier_time);
+            //Debug.Log("방어막 사용시간:" + barrier_time);
             yield return new WaitForSeconds(1f);
             barrier_time--;
         }

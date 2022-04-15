@@ -33,7 +33,6 @@ public class Water_S : MonoBehaviour
         {
             StartCoroutine("Obstacle_Water_Boom", int.Parse(this.gameObject.name));
             water_rigid.velocity = Vector3.zero;
-            Debug.Log("터져야함");
         }
     }
 
